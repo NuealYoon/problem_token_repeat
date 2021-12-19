@@ -1,28 +1,36 @@
-if True:
-    import transformers
+import transformers
 
-    from transformers import (
-        BartTokenizer,
-        BartForConditionalGeneration,
-    )
+from transformers import (
+    BartTokenizer,
+    BartForConditionalGeneration,
+)
 
-    print(f'** transformers v{transformers.__version__} **')
+print(f'** transformers v{transformers.__version__} **')
 
-    tokenizer = BartTokenizer.from_pretrained('facebook/bart-large')
-    model1 = BartForConditionalGeneration.from_pretrained('facebook/bart-large')
-    model1.config.force_bos_token_to_be_generated = True
+tokenizer = BartTokenizer.from_pretrained('facebook/bart-large')
+model = BartForConditionalGeneration.from_pretrained('facebook/bart-large')
+model.config.force_bos_token_to_be_generated = True
+model.eval()
+
+input_txt = 'This is <mask> sentence.'
+print(f'Input: "{input_txt}"')
+
+for text in input_txt.split():
+    token = tokenizer.encode(text, return_tensors='pt')
+    print(f'{text}, {token}, {tokenizer.tokenize(text)}')
+
+exit()
 
 
-    input_txt = 'This is <mask> sentence.'
-    print(f'Input: "{input_txt}"')
-
-    inputs1 = tokenizer.encode(input_txt, return_tensors='pt')
-    outputs1 = model1.generate(inputs1)
-    output_txt1 = tokenizer.decode(outputs1[0], skip_special_tokens=True)
-
-    print(f'Output: "{output_txt1}"')
-
-
+# token1 = tokenizer.encode('This', return_tensors='pt')
+# print(f' This = {token1.tolist()}')
+#
+# inputs = tokenizer.encode(input_txt, return_tensors='pt')
+# print(f'Tokens: "{inputs[0]}"')
+# outputs = model.generate(inputs)
+# output_txt = tokenizer.decode(outputs[0], skip_special_tokens=True)
+#
+# print(f'Output: "{output_txt}"')
 
 # ############
 # if False:
